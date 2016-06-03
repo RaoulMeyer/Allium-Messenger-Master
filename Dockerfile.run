@@ -10,6 +10,7 @@
 FROM erlang
 
 EXPOSE 1337
+EXPOSE 8080
 
 MAINTAINER Rik Harink <rikharink@gmail.com>
 
