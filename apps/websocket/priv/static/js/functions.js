@@ -1,7 +1,7 @@
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network;
-var url = "ws://localhost:8080/websocket";
+var url = "ws://uienrouter.nl:8080/websocket";
 var socket;
 var counter = 10;
 var edgeCounter = 10;
