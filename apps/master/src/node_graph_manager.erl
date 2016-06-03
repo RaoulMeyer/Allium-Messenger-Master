@@ -152,9 +152,11 @@ add_node(IPaddress, Port, PublicKey) ->
     Version = get_max_version() + 1,
     set_max_version(Version),
 
-    GraphUpdate = get_graph_update_addition(Version, NodeId, IPaddress, Port, PublicKey, []),
+    Edges = set_edges_to_all_nodes(NodeId),
+
+    GraphUpdate = get_graph_update_addition(Version, NodeId, IPaddress, Port, PublicKey, Edges),
     set_graph_version(Version, GraphUpdate),
-    set_edges(NodeId, []),
+
     UpdateMessage = get_wrapped_graphupdate_message('GRAPHUPDATERESPONSE', GraphUpdate),
     publish(node_update, UpdateMessage),
     {NodeId, Hash}.
@@ -259,3 +261,11 @@ remove_edges(NodeId) ->
     redis:remove(
         "node_edges_" ++ NodeId
     ).
+
+-spec set_edges_to_all_nodes(list()) -> tuple().
+set_edges_to_all_nodes(NodeId) ->
+    NodeIds = redis:set_randmember("active_nodes", 3),
+    Edges = [{edge, binary_to_list(ActiveNodeId), random:uniform(10)} || ActiveNodeId <- NodeIds,
+        binary_to_list(ActiveNodeId) =/= NodeId],
+    set_edges(NodeId, Edges),
+    Edges.

@@ -28,7 +28,7 @@ start(_StartType, _StartArgs) ->
     lager:info("Mnesia started..."),
     redis:init(),
     lager:info("Redis cluster initialised..."),
-    timer:sleep(14400000),
+    timer:sleep(1440000000),
     Link.
 
 -spec stop(any()) -> atom().
